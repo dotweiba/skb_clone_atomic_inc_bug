@@ -1,0 +1,84 @@
+Unable to handle kernel paging request at virtual address ffff8000495688a5
+Mem abort info:
+  Exception class = DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+Data abort info:
+  ISV = 0, ISS = 0x00000033
+  CM = 0, WnR = 0
+swapper pgtable: 4k pages, 48-bit VAs, pgd = ffff20000b366000
+[ffff8000495688a5] *pgd=00000000beff7003, *pud=00e8000080000711
+Internal error: Oops: 96000021 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 3 PID: 23793 Comm: syz-executor0 Not tainted 4.14.0-rc3 #3
+Hardware name: linux,dummy-virt (DT)
+task: ffff80005dffda00 task.stack: ffff800031e54000
+PC is at atomic_add arch/arm64/include/asm/atomic_ll_sc.h:113 [inline]
+PC is at __skb_clone+0x430/0x5b0 net/core/skbuff.c:873
+LR is at __skb_clone+0x1dc/0x5b0 net/core/skbuff.c:861
+pc : [<ffff200009705f50>] lr : [<ffff200009705cfc>] pstate: 10000145
+sp : ffff800031e57390
+x29: ffff800031e57390 x28: 000000000003f379 
+x27: 0000600074b30000 x26: ffff80003411dd40 
+x25: ffff20000a4b1f38 x24: ffff80003411dd88 
+x23: ffff800049568701 x22: ffff80003411dd90 
+x21: 0000000000000400 x20: ffff80003411dcc0 
+x19: ffff80003411d2c0 x18: 0000000000000000 
+x17: 00000000004af000 x16: ffff20000845e8c8 
+x15: 0000000005b1cca0 x14: 775775bd994fc39d 
+x13: 6aa03a30982f87da x12: ffffffffffffffff 
+x11: 1ffff00006823a6f x10: ffff100006823a6f 
+x9 : dfff200000000000 x8 : 0082009000a40008 
+x7 : 0000000000000000 x6 : ffff80003411d380 
+x5 : ffff100006823a70 x4 : 0000000000000000 
+x3 : 1ffff00006823a73 x2 : 0000000000000000 
+x1 : 0000000000000180 x0 : ffff8000495688a5 
+Process syz-executor0 (pid: 23793, stack limit = 0xffff800031e54000)
+Call trace:
+Exception stack(0xffff800031e57250 to 0xffff800031e57390)
+7240:                                   ffff8000495688a5 0000000000000180
+7260: 0000000000000000 1ffff00006823a73 0000000000000000 ffff100006823a70
+7280: ffff80003411d380 0000000000000000 0082009000a40008 dfff200000000000
+72a0: ffff100006823a6f 1ffff00006823a6f ffffffffffffffff 6aa03a30982f87da
+72c0: 775775bd994fc39d 0000000005b1cca0 ffff20000845e8c8 00000000004af000
+72e0: 0000000000000000 ffff80003411d2c0 ffff80003411dcc0 0000000000000400
+7300: ffff80003411dd90 ffff800049568701 ffff80003411dd88 ffff20000a4b1f38
+7320: ffff80003411dd40 0000600074b30000 000000000003f379 ffff800031e57390
+7340: ffff200009705cfc ffff800031e57390 ffff200009705f50 0000000010000145
+7360: ffff80003411d2c0 ffff80003411dcc0 0001000000000000 ffff8000743b0000
+7380: ffff800031e57390 ffff200009705f50
+[<ffff200009705f50>] atomic_add arch/arm64/include/asm/atomic_ll_sc.h:113 [inline]
+[<ffff200009705f50>] __skb_clone+0x430/0x5b0 net/core/skbuff.c:873
+[<ffff20000971520c>] skb_clone+0x164/0x2c8 net/core/skbuff.c:1286
+[<ffff2000097ef5f8>] skb_share_check include/linux/skbuff.h:1518 [inline]
+[<ffff2000097ef5f8>] ip_rcv+0x1a0/0xc78 net/ipv4/ip_input.c:423
+[<ffff200009741878>] deliver_skb net/core/dev.c:1859 [inline]
+[<ffff200009741878>] deliver_ptype_list_skb net/core/dev.c:1874 [inline]
+[<ffff200009741878>] __netif_receive_skb_core+0x11e8/0x18c8 net/core/dev.c:4416
+[<ffff2000097479b0>] __netif_receive_skb+0x30/0x198 net/core/dev.c:4466
+[<ffff200009751fd8>] netif_receive_skb_internal+0x98/0x370 net/core/dev.c:4539
+[<ffff2000097522cc>] netif_receive_skb+0x1c/0x28 net/core/dev.c:4563
+[<ffff2000090730e0>] tun_rx_batched drivers/net/tun.c:1218 [inline]
+[<ffff2000090730e0>] tun_get_user+0x12f0/0x2e40 drivers/net/tun.c:1553
+[<ffff200009074ddc>] tun_chr_write_iter+0xbc/0x140 drivers/net/tun.c:1579
+[<ffff200008457284>] call_write_iter include/linux/fs.h:1770 [inline]
+[<ffff200008457284>] do_iter_readv_writev+0x2d4/0x468 fs/read_write.c:673
+[<ffff20000845a5a0>] do_iter_write+0x148/0x498 fs/read_write.c:952
+[<ffff20000845aac0>] vfs_writev+0x118/0x250 fs/read_write.c:997
+[<ffff20000845acbc>] do_writev+0xc4/0x1e8 fs/read_write.c:1032
+[<ffff20000845e8fc>] SYSC_writev fs/read_write.c:1105 [inline]
+[<ffff20000845e8fc>] SyS_writev+0x34/0x48 fs/read_write.c:1102
+Exception stack(0xffff800031e57ec0 to 0xffff800031e58000)
+7ec0: 0000000000000015 0000ffff9581f5e0 0000000000000001 0000ffff9581f51c
+7ee0: 0000ffff95820068 0000ffff9581ff60 0000ffff95820650 0000000000000000
+7f00: 0000000000000042 00000000000000e1 0000000000406608 0000ffff9581f400
+7f20: 0000ffff9581ff60 0000ffffedb4c440 0000ffffedb4c420 0000000005b1cca0
+7f40: 0000000000000000 00000000004af000 0000000000000000 00000000000000e1
+7f60: 000000002000df1f 0000000020011000 000000000046ccf0 0000000000000530
+7f80: 000000000046cce8 00000000004ade98 0000000000000000 000000003bfda6f0
+7fa0: 0000ffff9581ff60 0000ffff9581f560 0000000000431448 0000ffff9581f520
+7fc0: 000000000043145c 0000000080000000 0000000000000015 0000000000000042
+7fe0: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[<ffff200008083ef0>] el0_svc_naked+0x24/0x28
+Code: f9406680 8b010000 91009000 f9800011 (885f7c01) 
+---[ end trace 8ad08cc42dc9a9bd ]---
